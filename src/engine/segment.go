@@ -262,6 +262,8 @@ const (
 	XMAKE SegmentType = "xmake"
 	// YTM writes YouTube Music information and status
 	YTM SegmentType = "ytm"
+	// Zig write zig version if build.zig is present
+	ZIG SegmentType = "zig"
 )
 
 // Segments contains all available prompt segment writers.
@@ -352,6 +354,7 @@ var Segments = map[SegmentType]func() SegmentWriter{
 	WITHINGS:        func() SegmentWriter { return &segments.Withings{} },
 	XMAKE:           func() SegmentWriter { return &segments.XMake{} },
 	YTM:             func() SegmentWriter { return &segments.Ytm{} },
+	ZIG:             func() SegmentWriter { return &segments.Zig{} },
 }
 
 func (segment *Segment) style() SegmentStyle {
