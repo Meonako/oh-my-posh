@@ -17,7 +17,7 @@ func (z *Zig) Init(props properties.Properties, env platform.Environment) {
 	z.language = language{
 		env:        env,
 		props:      props,
-		extensions: []string{"build.zig"},
+		extensions: []string{"*.zig", "build.zig"},
 		commands: []*cmd{
 			{
 				executable: "zig",
