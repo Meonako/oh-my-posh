@@ -1,10 +1,17 @@
 #! /usr/bin/nu
 
-let git_result = git pull
+let _ = git pull
 
-if ($git_result == "Already up to date.") {
-    echo "No update. Terminated."
-    exit 0
+let fetch_result = git fetch upstream
+
+if ($fetch_result | is-empty) {
+    let user_input = (input $"(ansi green)No update. Are you sure you want to continue? [y/N] ")
+    if ($user_input | is-empty) or ($user_input != "yes" and $user_input != "y") {
+        exit 0
+    }
+} else {
+    let _ = git checkout main
+    let _ = git merge upstream/main
 }
 
 $env.GOARCH = "amd64"
@@ -12,11 +19,21 @@ $env.GOARCH = "amd64"
 cd src
 
 $env.GOOS = "linux"
+print ("Building for linux..." | ansi gradient --fgstart "0x8aabfc" --fgend "0xffffff")
 
 go build
-sudo mv src (which oh-my-posh | get path | first)
+
+let p1 = (which oh-my-posh | get path | first)
+print -n $"(ansi yellow)Rewriting " ($p1 | ansi gradient --fgstart "0xffffff" --fgend "0xeb14ff") "...\n"
+
+sudo mv src $p1
 
 $env.GOOS = "windows"
+print ("Building for windows..." | ansi gradient --fgstart "0x8aabfc" --fgend "0xffffff")
 
 go build
+
+let p2 = (`/mnt/c/Program Files/nu/bin/nu.exe` -c "which oh-my-posh | get path | first")
+print -n $"(ansi yellow)Rewriting " ($p2 | ansi gradient --fgstart "0xffffff" --fgend "0xeb14ff") "...\n"
+
 sudo mv src.exe (`/mnt/c/Program Files/nu/bin/nu.exe` -c "which oh-my-posh | get path | first")
