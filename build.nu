@@ -5,7 +5,7 @@ let _ = git pull
 let fetch_result = git fetch upstream
 
 if ($fetch_result | is-empty) {
-    let user_input = (input $"(ansi green)No update. Are you sure you want to continue? [y/N] ")
+    let user_input = (input $"(ansi green)No update. Do you want to continue? [y/N] ")
     if ($user_input | is-empty) or not ($user_input | str contains -i "y") {
         exit 0
     }
@@ -35,7 +35,5 @@ go build
 
 let windows_path = $'/mnt/(`/mnt/c/Program Files/nu/bin/nu.exe` -c "which oh-my-posh | get path | first | str replace ':' '' | str replace -a '\\' '/' | str downcase")'
 print -n $"(ansi yellow)Rewriting " ($windows_path | ansi gradient --fgstart "0xffffff" --fgend "0xeb14ff") "...\n"
-
-# `/mnt/c/Program Files/nu/bin/nu.exe` -c 'mv "C:\src.exe" (which oh-my-posh | get path | first)'
 
 sudo mv src.exe $windows_path
