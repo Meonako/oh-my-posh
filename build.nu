@@ -6,7 +6,7 @@ let fetch_result = git fetch upstream
 
 if ($fetch_result | is-empty) {
     let user_input = (input $"(ansi green)No update. Are you sure you want to continue? [y/N] ")
-    if ($user_input | is-empty) or ($user_input != "yes" and $user_input != "y") {
+    if ($user_input | is-empty) or not ($user_input | str contains -i "y") {
         exit 0
     }
 } else {
