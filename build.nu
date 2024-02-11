@@ -23,17 +23,19 @@ print ("Building for linux..." | ansi gradient --fgstart "0x8aabfc" --fgend "0xf
 
 go build
 
-let p1 = (which oh-my-posh | get path | first)
-print -n $"(ansi yellow)Rewriting " ($p1 | ansi gradient --fgstart "0xffffff" --fgend "0xeb14ff") "...\n"
+let linux_path = (which oh-my-posh | get path | first)
+print -n $"(ansi yellow)Rewriting " ($linux_path | ansi gradient --fgstart "0xffffff" --fgend "0xeb14ff") "...\n"
 
-sudo mv src $p1
+sudo mv src $linux_path
 
 $env.GOOS = "windows"
 print ("Building for windows..." | ansi gradient --fgstart "0x8aabfc" --fgend "0xffffff")
 
 go build
 
-let p2 = (`/mnt/c/Program Files/nu/bin/nu.exe` -c "which oh-my-posh | get path | first")
-print -n $"(ansi yellow)Rewriting " ($p2 | ansi gradient --fgstart "0xffffff" --fgend "0xeb14ff") "...\n"
+let windows_path = $'/mnt/(`/mnt/c/Program Files/nu/bin/nu.exe` -c "which oh-my-posh | get path | first | str replace ':' '' | str replace -a '\\' '/' | str downcase")'
+print -n $"(ansi yellow)Rewriting " ($windows_path | ansi gradient --fgstart "0xffffff" --fgend "0xeb14ff") "...\n"
 
-sudo mv src.exe (`/mnt/c/Program Files/nu/bin/nu.exe` -c "which oh-my-posh | get path | first")
+# `/mnt/c/Program Files/nu/bin/nu.exe` -c 'mv "C:\src.exe" (which oh-my-posh | get path | first)'
+
+sudo mv src.exe $windows_path
