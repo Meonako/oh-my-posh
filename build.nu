@@ -1,8 +1,8 @@
 #! /usr/bin/nu
 
-let _ = git pull
+let _ = (git pull)
 
-let fetch_result = git fetch upstream
+let fetch_result = (git fetch upstream)
 
 if ($fetch_result | is-empty) {
     let user_input = (input $"(ansi green)No update. Do you want to continue? [y/N] ")
@@ -10,8 +10,8 @@ if ($fetch_result | is-empty) {
         exit 0
     }
 } else {
-    let _ = git checkout main
-    let _ = git merge upstream/main
+    let _ = (git checkout main)
+    let _ = (git merge upstream/main)
 }
 
 $env.GOARCH = "amd64"
