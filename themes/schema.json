@@ -321,7 +321,8 @@
             "winreg",
             "withings",
             "xmake",
-            "ytm"
+            "ytm",
+            "zig"
           ]
         },
         "style": {
