@@ -1,18 +1,11 @@
 #! /usr/bin/nu
 
-let pull_result = (git pull)
+let _ = (git pull)
+let _ = (git fetch upstream)
+let _ = (git checkout main)
+let _ = (git merge upstream/main)
 
-let fetch_result = (git fetch upstream)
-
-if ($fetch_result | is-empty) and (($pull_result | is-empty) or ($pull_result == "Already up to date.")) {
-    let user_input = (input $"(ansi green)No update. Do you want to continue? [y/N] ")
-    if ($user_input | is-empty) or not ($user_input | str contains -i "y") {
-        exit 0
-    }
-} else {
-    let _ = (git checkout main)
-    let _ = (git merge upstream/main)
-}
+let og_pwd = (pwd)
 
 $env.GOARCH = "amd64"
 
@@ -23,19 +16,39 @@ go mod tidy
 $env.GOOS = "linux"
 print ("Building for linux..." | ansi gradient --fgstart "0x8aabfc" --fgend "0xffffff")
 
-go build -ldflags "-s -w"
+build
 
-let linux_path = (which oh-my-posh | get path | first)
-print -n $"(ansi yellow)Rewriting " ($linux_path | ansi gradient --fgstart "0xffffff" --fgend "0xeb14ff") "...\n"
+let linux_path = (which oh-my-posh | get path)
+let linux_output_path = if ($linux_path | is-empty) {
+    let path = $'($og_pwd)/outputs/linux'
+    mkdir $path
+    $'($path)/oh-my-posh'
+} else {
+    ($linux_path | first)
+}
 
-sudo mv src $linux_path
+print -n $"(ansi yellow)Linux binary saving to " ($linux_output_path | ansi gradient --fgstart "0xffffff" --fgend "0xeb14ff") "...\n"
+
+sudo mv src $linux_output_path
 
 $env.GOOS = "windows"
 print ("Building for windows..." | ansi gradient --fgstart "0x8aabfc" --fgend "0xffffff")
 
-go build -ldflags "-s -w"
+build
 
-let windows_path = $'/mnt/(`/mnt/c/Program Files/nu/bin/nu.exe` -c "which oh-my-posh | get path | first | str replace ':' '' | str replace -a '\\' '/' | str downcase")'
-print -n $"(ansi yellow)Rewriting " ($windows_path | ansi gradient --fgstart "0xffffff" --fgend "0xeb14ff") "...\n"
+let windows_path = (`/mnt/c/Program Files/nu/bin/nu.exe` -c "which oh-my-posh | get path | is-empty")
+let windows_output_path = if ($windows_path == "true") {
+    let path = $'($og_pwd)/outputs/windows'
+    mkdir $path
+    $'($path)/oh-my-posh.exe'
+} else {
+    $'/mnt/(`/mnt/c/Program Files/nu/bin/nu.exe` -c "which oh-my-posh | get path | first | str replace ":" "" | str replace -a '\\' '/' | str downcase")'
+}
 
-sudo mv src.exe $windows_path
+print -n $"(ansi yellow)Windows binary saving to " ($windows_output_path | ansi gradient --fgstart "0xffffff" --fgend "0xeb14ff") "...\n"
+
+sudo mv src.exe $windows_output_path
+
+def build [] {
+    go build -ldflags="-s -w -X 'github.com/jandedobbeleer/oh-my-posh/src/build.Version=19.11.4'"
+}
