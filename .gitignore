@@ -250,3 +250,6 @@ cosign.key
 *.omp.json.bak
 
 __debug_bin
+
+# Output folder
+/outputs
