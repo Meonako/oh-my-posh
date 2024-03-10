@@ -2280,6 +2280,34 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "gergelyk",
+      "name": "Grzegorz Krasoń",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11185582?v=4",
+      "profile": "http://krason.dev/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rockyoung",
+      "name": "rockyoung",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1207971?v=4",
+      "profile": "https://github.com/rockyoung",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "shravanasati",
+      "name": "Shravan Asati",
+      "avatar_url": "https://avatars.githubusercontent.com/u/69118069?v=4",
+      "profile": "https://github.com/shravanasati",
+      "contributions": [
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,
