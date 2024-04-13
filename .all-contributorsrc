@@ -2308,6 +2308,36 @@
       "contributions": [
         "design"
       ]
+    },
+    {
+      "login": "lzecca78",
+      "name": "Luca Zecca",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3881844?v=4",
+      "profile": "https://github.com/lzecca78",
+      "contributions": [
+        "code",
+        "design",
+        "doc"
+      ]
+    },
+    {
+      "login": "jreilly-lukava",
+      "name": "Joshua Reilly",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30353736?v=4",
+      "profile": "https://github.com/jreilly-lukava",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "ivan-the-terrible",
+      "name": "Ivan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56458442?v=4",
+      "profile": "https://ivan-the-terrible.github.io/",
+      "contributions": [
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,
