@@ -98,12 +98,13 @@ func (m *main) buildFontList(nerdFonts []*Asset) {
 }
 
 func getFontsList() {
-	nerdFonts, err := Nerds()
+	fonts, err := Fonts()
 	if err != nil {
 		program.Send(errMsg(err))
 		return
 	}
-	program.Send(loadMsg(nerdFonts))
+
+	program.Send(loadMsg(fonts))
 }
 
 func downloadFontZip(location string) {
@@ -228,6 +229,10 @@ func (m *main) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		var cmd tea.Cmd
 		m.spinner, cmd = m.spinner.Update(msg)
 		return m, cmd
+	}
+
+	if m.list == nil {
+		return m, nil
 	}
 
 	lst, cmd := m.list.Update(msg)

@@ -262,6 +262,18 @@
           "description": "https://ohmyposh.dev/docs/configuration/block#newline",
           "default": false
         },
+        "leading_diamond": {
+          "type": "string",
+          "title": "Leading diamond",
+          "description": "https://ohmyposh.dev/docs/configuration/block#leading-diamond",
+          "default": ""
+        },
+        "trailing_diamond": {
+          "type": "string",
+          "title": "Trailing diamond",
+          "description": "https://ohmyposh.dev/docs/configuration/block#trailing-diamond",
+          "default": ""
+        },
         "segments": {
           "type": "array",
           "title": "Segments list, prompt elements to display based on context",
@@ -289,6 +301,7 @@
           "description": "https://ohmyposh.dev/docs/configuration/segment",
           "enum": [
             "az",
+            "azd",
             "aws",
             "azfunc",
             "argocd",
@@ -297,6 +310,7 @@
             "bazel",
             "brewfather",
             "buf",
+            "bun",
             "carbonintensity",
             "command",
             "connection",
@@ -321,7 +335,6 @@
             "haskell",
             "helm",
             "ipify",
-            "iterm",
             "julia",
             "java",
             "kotlin",
@@ -342,6 +355,7 @@
             "python",
             "php",
             "plastic",
+            "pnpm",
             "project",
             "pulumi",
             "quasar",
@@ -373,6 +387,7 @@
             "winreg",
             "withings",
             "xmake",
+            "yarn",
             "ytm",
             "zig"
           ]
@@ -550,7 +565,10 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if a folder is an NPM workspace",
-                    "default": ["package.json", "package-lock.json"],
+                    "default": [
+                      "package.json",
+                      "package-lock.json"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -577,7 +595,13 @@
                 "type": "string",
                 "title": "Powerline Symbol",
                 "description": "https://ohmyposh.dev/docs/configuration/segment#powerline-symbol",
-                "default": "\uE0B0"
+                "default": "\ue0b0"
+              },
+              "leading_powerline_symbol": {
+                "type": "string",
+                "title": "Leading Powerline Symbol",
+                "description": "https://ohmyposh.dev/docs/configuration/segment#powerline-symbol",
+                "default": "\ue0d7"
               },
               "invert_powerline": {
                 "type": "boolean",
@@ -632,9 +656,31 @@
                     "title": "Source",
                     "description": "https://ohmyposh.dev/docs/segments/az#properties",
                     "default": "first_match",
-                    "enum": ["first_match", "cli", "pwsh"]
+                    "enum": [
+                      "first_match",
+                      "cli",
+                      "pwsh"
+                    ]
                   }
                 }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "azd"
+              }
+            }
+          },
+          "then": {
+            "title": "Azure Developer CLI Segment",
+            "description": "https://ohmyposh.dev/docs/segments/azd",
+            "properties": {
+              "properties": {
+                "properties": { }
               }
             }
           }
@@ -746,7 +792,11 @@
                     "type": "array",
                     "title": "Folders",
                     "description": "The folders to look for when determining if a folder is a Bazel workspace",
-                    "default": ["bazel-bin", "bazel-out", "bazel-testlogs"],
+                    "default": [
+                      "bazel-bin",
+                      "bazel-out",
+                      "bazel-testlogs"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -792,7 +842,62 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if a folder is a Buf workspace",
-                    "default": ["buf.yaml", "buf.gen.yaml", "buf.work.yaml"],
+                    "default": [
+                      "buf.yaml",
+                      "buf.gen.yaml",
+                      "buf.work.yaml"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "folders": {
+                    "$ref": "#/definitions/folders"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "bun"
+              }
+            }
+          },
+          "then": {
+            "title": "Bun CLI Segment",
+            "description": "https://ohmyposh.dev/docs/segments/bun",
+            "properties": {
+              "properties": {
+                "properties": {
+                  "home_enabled": {
+                    "$ref": "#/definitions/home_enabled"
+                  },
+                  "fetch_version": {
+                    "$ref": "#/definitions/fetch_version"
+                  },
+                  "missing_command_text": {
+                    "$ref": "#/definitions/missing_command_text"
+                  },
+                  "display_mode": {
+                    "$ref": "#/definitions/display_mode"
+                  },
+                  "version_url_template": {
+                    "$ref": "#/definitions/version_url_template"
+                  },
+                  "cache_version": {
+                    "$ref": "#/definitions/cache_version"
+                  },
+                  "extensions": {
+                    "type": "array",
+                    "title": "Extensions",
+                    "description": "The extensions to look for when determining if a folder is a Bun workspace",
+                    "default": [
+                      "bun.lockb"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -885,7 +990,12 @@
                     "type": "string",
                     "title": "Connection type",
                     "description": "The connection type to display",
-                    "enum": ["ethernet", "wifi", "cellular", "bluetooth"],
+                    "enum": [
+                      "ethernet",
+                      "wifi",
+                      "cellular",
+                      "bluetooth"
+                    ],
                     "default": "wifi|ethernet"
                   },
                   "unit": {
@@ -947,7 +1057,10 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if a folder is a CMake workspace",
-                    "default": ["*.cmake", "CMakeLists.txt"],
+                    "default": [
+                      "*.cmake",
+                      "CMakeLists.txt"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -1055,10 +1168,10 @@
                     "default": false
                   },
                   "status_template": {
-                      "type": "string",
-                      "title": "Status Template",
-                      "description": "The template to use for the status segment",
-                      "default": "|"
+                    "type": "string",
+                    "title": "Status Template",
+                    "description": "The template to use for the status segment",
+                    "default": "|"
                   },
                   "status_separator": {
                     "type": "string",
@@ -1121,7 +1234,9 @@
                     "type": "array",
                     "title": "Folders",
                     "description": "The folders to look for when determining if a folder is a Flutter workspace",
-                    "default": [".dart_tool"],
+                    "default": [
+                      ".dart_tool"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -1299,6 +1414,12 @@
                     "description": "Icon/text to display when the upstream is CodeCommit",
                     "default": "\uF270"
                   },
+                  "codeberg_icon": {
+                    "type": "string",
+                    "title": "Codeberg Icon",
+                    "description": "Icon/text to display when the upstream is Codeberg",
+                    "default": "\uF330"
+                  },
                   "git_icon": {
                     "type": "string",
                     "title": "Git Icon",
@@ -1394,7 +1515,10 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if a folder is a Go workspace",
-                    "default": ["*.go", "go.mod"],
+                    "default": [
+                      "*.go",
+                      "go.mod"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -1457,7 +1581,9 @@
                     "type": "array",
                     "title": "Folders",
                     "description": "The folders to look for when determining if a folder is a Dart workspace",
-                    "default": [".dart_tool"],
+                    "default": [
+                      ".dart_tool"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -1503,7 +1629,11 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if a folder is a Deno workspace",
-                    "default": ["*.js", "*.ts", "deno.json"],
+                    "default": [
+                      "*.js",
+                      "*.ts",
+                      "deno.json"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -1552,7 +1682,10 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if a folder is a Crystal workspace",
-                    "default": ["*.cr", "shard.yml"],
+                    "default": [
+                      "*.cr",
+                      "shard.yml"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -1601,7 +1734,9 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if a folder is a Julia workspace",
-                    "default": ["*.jl"],
+                    "default": [
+                      "*.jl"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -1650,7 +1785,12 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if a folder is a Perl workspace",
-                    "default": [".perl-version", "*.pl", "*.pm", "*.t"],
+                    "default": [
+                      ".perl-version",
+                      "*.pl",
+                      "*.pm",
+                      "*.t"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -1813,7 +1953,11 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if a folder is a Ruby workspace",
-                    "default": ["*.rb", "Rakefile", "Gemfile"]
+                    "default": [
+                      "*.rb",
+                      "Rakefile",
+                      "Gemfile"
+                    ]
                   },
                   "folders": {
                     "$ref": "#/definitions/folders"
@@ -1859,7 +2003,11 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if a folder is a Rust workspace",
-                    "default": ["*.rs", "Cargo.toml", "Cargo.lock"]
+                    "default": [
+                      "*.rs",
+                      "Cargo.toml",
+                      "Cargo.lock"
+                    ]
                   },
                   "folders": {
                     "$ref": "#/definitions/folders"
@@ -1905,7 +2053,9 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if a folder is a XMake workspace",
-                    "default": ["xmake.lua"],
+                    "default": [
+                      "xmake.lua"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -2343,7 +2493,7 @@
                     "default": 1
                   },
                   "max_width": {
-                    "type": "integer",
+                    "type": ["integer","string"],
                     "title": "Maximum Width",
                     "description": "Maximum path width to display for powerlevel style",
                     "default": 0
@@ -2408,6 +2558,12 @@
                     "title": "The format to use on a git root directory",
                     "description": "Golang string format to apply to the .git folder",
                     "default": ""
+                  },
+                  "display_cygpath": {
+                    "type": "boolean",
+                    "title": "Display the Cygwin (Linux) style path",
+                    "description": "Display the Cygwin (Linux) style path using cygpath -u $PWD.",
+                    "default": false
                   }
                 }
               }
@@ -2565,7 +2721,10 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if a folder is a Quasar workspace",
-                    "default": ["quasar.config", "quasar.config.js"]
+                    "default": [
+                      "quasar.config",
+                      "quasar.config.js"
+                    ]
                   },
                   "folders": {
                     "$ref": "#/definitions/folders"
@@ -2891,24 +3050,16 @@
                     "description": "Location to use for the API call interpreted only if valid coordinates aren't given. Formatted as <City>,<STATE>,<COUNTRY_CODE>. City name, state code and country code divided by comma. Please, refer to ISO 3166 for the state codes or country codes.",
                     "default": "De Bilt,NL"
                   },
-                  "latitude" : {
-                    "type": "number",
-                    "title": "Latitude",
-                    "description": "The latitude of the requested location, valid between -90 and 90",
-                    "default": 91
-                  },
-                  "longitude" : {
-                    "type": "number",
-                    "title": "Longitude",
-                    "description": "The longitude of the requested location, valid between -180 and 180",
-                    "default": 181
-                  },
                   "units": {
                     "type": "string",
                     "title": "units",
                     "description": "Units of measurement. Available values are standard (kelvin), metric (celsius), and imperial (fahrenheit). Default is standard",
                     "default": "standard",
-                    "enum": ["standard", "metric", "imperial"]
+                    "enum": [
+                      "standard",
+                      "metric",
+                      "imperial"
+                    ]
                   },
                   "http_timeout": {
                     "$ref": "#/definitions/http_timeout"
@@ -2957,7 +3108,10 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if a folder is a Elixir workspace",
-                    "default": ["*.ex", "*.exs"],
+                    "default": [
+                      "*.ex",
+                      "*.exs"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -3180,7 +3334,9 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if the current directory is an Angular project",
-                    "default": ["angular.json"],
+                    "default": [
+                      "angular.json"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -3229,7 +3385,9 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if the current directory is a React project",
-                    "default": ["package.json"],
+                    "default": [
+                      "package.json"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -3278,7 +3436,10 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if the current directory is an Nx project",
-                    "default": ["workspace.json", "nx.json"],
+                    "default": [
+                      "workspace.json",
+                      "nx.json"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -3697,7 +3858,11 @@
                     "type": "string",
                     "title": "Use Stack GHC",
                     "description": "Get the GHC version used by Stack. Will decrease performance. Boolean indicating whether stack ghc was used available in template as .StackGhc",
-                    "enum": ["always", "package", "never"],
+                    "enum": [
+                      "always",
+                      "package",
+                      "never"
+                    ],
                     "default": "never"
                   },
                   "extensions": {
@@ -3782,7 +3947,9 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if the current directory is a UI5 project",
-                    "default": ["*ui5*.y*ml"],
+                    "default": [
+                      "*ui5*.y*ml"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -3875,7 +4042,9 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if the current directory is a Vala project",
-                    "default": ["*.vala"],
+                    "default": [
+                      "*.vala"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -3924,7 +4093,10 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if the current directory is a Cloud Foundry project",
-                    "default": ["manifest.yml", "mta.yaml"],
+                    "default": [
+                      "manifest.yml",
+                      "mta.yaml"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -4002,7 +4174,11 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if the current directory is a Kotlin project",
-                    "default": ["*.kt", "*.kts", "*.ktm"],
+                    "default": [
+                      "*.kt",
+                      "*.kts",
+                      "*.ktm"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -4100,14 +4276,20 @@
                     "type": "string",
                     "title": "Preferred Executable",
                     "description": "The preferred executable to use when fetching the version.",
-                    "enum": ["lua", "luajit"],
+                    "enum": [
+                      "lua",
+                      "luajit"
+                    ],
                     "default": "lua"
                   },
                   "extensions": {
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if the current directory is a Lua project",
-                    "default": ["*.lua", "*.rockspec"],
+                    "default": [
+                      "*.lua",
+                      "*.rockspec"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -4156,7 +4338,10 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if the current directory is a Swift project",
-                    "default": ["*.swift", "*.SWIFT"],
+                    "default": [
+                      "*.swift",
+                      "*.SWIFT"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -4205,7 +4390,11 @@
                     "type": "array",
                     "title": "Extensions",
                     "description": "The extensions to look for when determining if the current directory is a CDS project",
-                    "default": [".cdsrc.json", ".cdsrc-private.json", "*.cds"],
+                    "default": [
+                      ".cdsrc.json",
+                      ".cdsrc-private.json",
+                      "*.cds"
+                    ],
                     "items": {
                       "type": "string"
                     }
@@ -4400,7 +4589,9 @@
         {
           "if": {
             "properties": {
-              "type": { "const": "umbraco" }
+              "type": {
+                "const": "umbraco"
+              }
             }
           },
           "then": {
@@ -4414,6 +4605,104 @@
                     "title": "New Property",
                     "description": "the default text to display",
                     "default": "Hello"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "pnpm"
+              }
+            }
+          },
+          "then": {
+            "title": "PNPM Segment",
+            "description": "https://ohmyposh.dev/docs/segments/pnpm",
+            "properties": {
+              "properties": {
+                "properties": {
+                  "home_enabled": {
+                    "$ref": "#/definitions/home_enabled"
+                  },
+                  "fetch_version": {
+                    "$ref": "#/definitions/fetch_version"
+                  },
+                  "display_mode": {
+                    "$ref": "#/definitions/display_mode"
+                  },
+                  "missing_command_text": {
+                    "$ref": "#/definitions/missing_command_text"
+                  },
+                  "version_url_template": {
+                    "$ref": "#/definitions/version_url_template"
+                  },
+                  "cache_version": {
+                    "$ref": "#/definitions/cache_version"
+                  },
+                  "extensions": {
+                    "type": "array",
+                    "title": "Extensions",
+                    "description": "The extensions to look for when determining if a folder is an PNPM workspace",
+                    "default": ["package.json", "pnpm-lock.yaml"],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "folders": {
+                    "$ref": "#/definitions/folders"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "yarn"
+              }
+            }
+          },
+          "then": {
+            "title": "Yarn Segment",
+            "description": "https://ohmyposh.dev/docs/segments/yarn",
+            "properties": {
+              "properties": {
+                "properties": {
+                  "home_enabled": {
+                    "$ref": "#/definitions/home_enabled"
+                  },
+                  "fetch_version": {
+                    "$ref": "#/definitions/fetch_version"
+                  },
+                  "display_mode": {
+                    "$ref": "#/definitions/display_mode"
+                  },
+                  "missing_command_text": {
+                    "$ref": "#/definitions/missing_command_text"
+                  },
+                  "version_url_template": {
+                    "$ref": "#/definitions/version_url_template"
+                  },
+                  "cache_version": {
+                    "$ref": "#/definitions/cache_version"
+                  },
+                  "extensions": {
+                    "type": "array",
+                    "title": "Extensions",
+                    "description": "The extensions to look for when determining if a folder is an Yarn workspace",
+                    "default": ["package.json", "yarn.lock"],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "folders": {
+                    "$ref": "#/definitions/folders"
                   }
                 }
               }
@@ -4449,6 +4738,24 @@
       "title": "Enable OSC99/7/51",
       "description": "https://ohmyposh.dev/docs/configuration/general#general-settings",
       "default": ""
+    },
+    "disable_notice": {
+      "type": "boolean",
+      "title": "Disable Upgrade Notice",
+      "description": "https://ohmyposh.dev/docs/configuration/title#general-settings",
+      "default": false
+    },
+    "auto_upgrade": {
+      "type": "boolean",
+      "title": "Enable automatic upgrades for Oh My Posh (supports Windows/macOS only)",
+      "description": "https://ohmyposh.dev/docs/configuration/title#general-settings",
+      "default": false
+    },
+    "patch_pwsh_bleed": {
+      "type": "boolean",
+      "title": "Patch PowerShell Color Bleed",
+      "description": "https://ohmyposh.dev/docs/configuration/title#general-settings",
+      "default": false
     },
     "console_title_template": {
       "type": "string",
@@ -4576,6 +4883,18 @@
     "accent_color": {
       "title": "Accent color",
       "$ref": "#/definitions/color"
+    },
+    "iterm_features": {
+      "type": "array",
+      "title": "The iTerm2 features to enable",
+      "items": {
+        "type": "string",
+        "enum": [
+          "prompt_mark",
+          "current_dir",
+          "remote_host"
+        ]
+      }
     }
   }
 }
