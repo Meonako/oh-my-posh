@@ -1,15 +1,14 @@
 package upgrade
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"os"
-	"runtime"
-
-	"github.com/inconshreveable/go-update"
-	"github.com/jandedobbeleer/oh-my-posh/src/platform"
+	"path/filepath"
 )
 
-func install() error {
+func install(tag string) error {
 	setState(validating)
 
 	executable, err := os.Executable()
@@ -17,23 +16,61 @@ func install() error {
 		return err
 	}
 
-	extension := ""
-	if runtime.GOOS == platform.WINDOWS {
-		extension = ".exe"
-	}
-
-	asset := fmt.Sprintf("posh-%s-%s%s", runtime.GOOS, runtime.GOARCH, extension)
-
 	setState(downloading)
 
-	data, err := downloadAsset(asset)
+	data, err := downloadAndVerify(tag)
 	if err != nil {
 		return err
 	}
 
-	defer data.Close()
+	setState(installing)
 
-	return update.Apply(data, update.Options{
-		TargetPath: executable,
-	})
+	targetDir := filepath.Dir(executable)
+	fileName := filepath.Base(executable)
+
+	newPath := filepath.Join(targetDir, fmt.Sprintf(".%s.new", fileName))
+	fp, err := os.OpenFile(newPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0775)
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(fp, bytes.NewReader(data))
+	// windows will have a lock when we do not close the file
+	fp.Close()
+
+	if err != nil {
+		return err
+	}
+
+	oldPath := filepath.Join(targetDir, fmt.Sprintf(".%s.old", fileName))
+
+	_ = os.Remove(oldPath)
+
+	err = os.Rename(executable, oldPath)
+	if err != nil {
+		return err
+	}
+
+	err = os.Rename(newPath, executable)
+
+	if err != nil {
+		// rollback
+		rerr := os.Rename(oldPath, executable)
+		if rerr != nil {
+			return rerr
+		}
+
+		return err
+	}
+
+	removeErr := os.Remove(oldPath)
+
+	// hide the old executable if we can't remove it
+	if removeErr != nil {
+		_ = hideFile(oldPath)
+	}
+
+	updateRegistry(tag, executable)
+
+	return nil
 }
